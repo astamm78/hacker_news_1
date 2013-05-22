@@ -1,0 +1,15 @@
+<h1><%= post.title %></h1>
+<h2><a href="<%= post.url %>">Link</a></h2>
+<h3>Posted by: <%= post.user.username %></h3>
+<h4>Comments:</h4>
+
+<form method="POST" action="/post/<%= post.id %>">
+  <textarea name="comment_text" rows="5" cols="30">
+  </textarea><br />
+  <button type="submit">chime in</button>
+</form>
+
+<% post.comments.each do |comment| %>
+<p><%= comment.content %></p>
+<p><%= comment.user.username %></p>
+<% end %>
