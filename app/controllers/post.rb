@@ -1,4 +1,5 @@
 get '/submit' do
+  session[:last_page] ='/submit'
   if session[:username]
     erb :submit
   else
@@ -13,6 +14,7 @@ post '/submit' do
 end
 
 get '/post/:post_id' do
+  session[:last_page] = "/post/#{params[:post_id]}"
   erb :post, :locals => { :post => Post.find(params[:post_id]) }
 end
 

@@ -1,7 +1,15 @@
-<h1><%= post.title %></h1>
-<h2><a href="<%= post.url %>">Link</a></h2>
-<h3>Posted by: <%= post.user.username %></h3>
-<h4>Comments:</h4>
+<div class="post">
+  <h1><%= post.title %></h1>
+  <h2><a href="<%= post.url %>">Link</a></h2>
+  <h3>Posted by: <%= post.user.username %></h3>
+    <% if current_user && !post.voters.include?(current_user) %>
+      <p class="voting">Vote <a id="post_up" href="/post/<%= post.id %>/vote_up">Up</a> or <a href="/post/<%= post.id %>/vote_down">Down</a></p>
+    <% elsif !current_user %>
+      <p>You must be logged in to vote.</p>
+    <% end %>
+  <p class="vote_results"><%= post.postvotes.where(:vote => 1).count %> upvotes (<%= post.postvotes.count %> total votes)</p>
+  <h4>Comments:</h4>
+</div>
 
 <form method="POST" action="/post/<%= post.id %>">
   <textarea name="comment_text" rows="5" cols="30">
@@ -10,6 +18,14 @@
 </form>
 
 <% post.comments.each do |comment| %>
+<div class="comment">
 <p><%= comment.content %></p>
 <p><%= comment.user.username %></p>
+  <% if current_user && !comment.users.include?(current_user) %>
+    <p class="voting">Vote <a href="/comment/<%= comment.id %>/vote_up">Up</a> or <a href="/comment/<%= comment.id %>/vote_down">Down</a></p>
+  <% elsif !current_user %>
+    <p>You must be logged in to vote.</p>
+  <% end %>
+<p class="vote_results"><%= comment.commentvotes.where(:vote => 1).count %> upvotes (<%= comment.commentvotes.count %> total votes)</p>
+</div>
 <% end %>

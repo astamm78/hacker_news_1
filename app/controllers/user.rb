@@ -9,7 +9,7 @@ end
 post '/login' do
   if User.authenticate( params[:username], params[:password] )
     session[:username] = params[:username]
-    redirect "/user/#{current_user.username}"
+    redirect session[:last_page]
   else
     erb :login, :locals => {:errors => "You done messed up."}
   end
@@ -21,7 +21,7 @@ post '/create_account' do
                           :password => params[:password] )
   if new_user.save
     session[:username] = new_user.username 
-    redirect "/user/#{new_user.username}"
+    redirect session[:last_page]
   else
     erb :login, :locals => {:errors => "You done messed up."}
   end
